@@ -36,7 +36,7 @@ function ProfilesPage() {
 
     const config = {
       method: "POST",
-      url: `/api/users/${id}`,
+      url: `/api/users/${id}/${currentId}`,
       withCredentials : true,
     }
 
@@ -55,7 +55,7 @@ function ProfilesPage() {
 
     const config = {
       method: "DELETE",
-      url: `/api/users/${id}`,
+      url: `/api/users/${id}/${currentId}`,
       withCredentials : true,
     }
 

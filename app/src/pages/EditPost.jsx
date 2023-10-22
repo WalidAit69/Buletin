@@ -72,7 +72,7 @@ function EditPost() {
 
     try {
       setisLoading(true);
-      const response = await axios("/api/post", {
+      const response = await axios(`/api/post/${Userid}`, {
         method: "put",
         data: data,
         withCredentials: true,

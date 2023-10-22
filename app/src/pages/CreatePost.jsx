@@ -58,7 +58,7 @@ function CreatePost() {
     setisLoading(true);
 
     try {
-      const response = await axios("/api/post", {
+      const response = await axios(`/api/post/${Userid}`, {
         method: "post",
         data: data,
         withCredentials: true,

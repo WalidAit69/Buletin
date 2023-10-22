@@ -36,9 +36,7 @@ function Header({ isStory, setisStory }) {
 
 
   const username = userInfo?.fullname;
-  const id = userInfo?.UserId;
-
-  console.log(userInfo)
+  const id = userInfo?._id;
 
 
   const header = {

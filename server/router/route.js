@@ -11,7 +11,6 @@ import bcrypt from "bcryptjs";
 import { PutObjectCommand, S3Client } from "@aws-sdk/client-s3";
 import mongoose from "mongoose";
 
-
 const uploadMiddleware = multer({ dest: "/tmp" });
 
 const useruploadMiddleware = multer({ dest: "/tmp" });
@@ -180,7 +179,7 @@ router.put(
 );
 
 //add posts
-router.post("/post", uploadMiddleware.single("file"), async (req, res) => {
+router.post("/post/:id", uploadMiddleware.single("file"), async (req, res) => {
   mongoose.connect(
     "mongodb+srv://walidait:samyboy2001..@cluster0.ksqig4m.mongodb.net/?retryWrites=true&w=majority"
   );
@@ -189,9 +188,13 @@ router.post("/post", uploadMiddleware.single("file"), async (req, res) => {
   const newpath = path.replace(/\\/g, "/");
   const url = await uploadToS3(newpath, originalname, mimetype);
 
-  const { token } = req.cookies;
-  jwt.verify(token, process.env.JWT_SECRET, {}, async (err, info) => {
-    if (err) throw err;
+  const { id } = req.params;
+
+  const user = await UserModel.findById(id);
+
+  if (!user) {
+    res.status(401).json("authorization failed");
+  } else {
     const { title, summary, topic, read, content } = req.body;
     const postDoc = await PostModel.create({
       title,
@@ -200,10 +203,10 @@ router.post("/post", uploadMiddleware.single("file"), async (req, res) => {
       read,
       content,
       cover: url,
-      author: info.UserId,
+      author: user._id,
     });
     res.json(postDoc);
-  });
+  }
 });
 
 //get all posts
@@ -298,7 +301,7 @@ router.delete("/post/:id", async (req, res) => {
 });
 
 //update post
-router.put("/post", uploadMiddleware.single("file"), async (req, res) => {
+router.put("/post/:id", uploadMiddleware.single("file"), async (req, res) => {
   mongoose.connect(
     "mongodb+srv://walidait:samyboy2001..@cluster0.ksqig4m.mongodb.net/?retryWrites=true&w=majority"
   );
@@ -310,18 +313,15 @@ router.put("/post", uploadMiddleware.single("file"), async (req, res) => {
     newPath = await uploadToS3(newpath, originalname, mimetype);
   }
 
-  const { token } = req.cookies;
-  jwt.verify(token, process.env.JWT_SECRET, {}, async (err, info) => {
-    if (err) throw err;
+  const { id } = req.params;
 
+  const user = await UserModel.findById(id);
+
+  if (!user) {
+    res.status(401).json("authorization failed");
+  } else {
     const { id, title, summary, topic, read, content } = req.body;
     const postDoc = await PostModel.findById(id);
-    const isAuthor =
-      JSON.stringify(postDoc.author) === JSON.stringify(info.UserId);
-
-    if (!isAuthor) {
-      res.status(400).json("authorization failed");
-    }
 
     await postDoc.updateOne({
       title,
@@ -330,15 +330,15 @@ router.put("/post", uploadMiddleware.single("file"), async (req, res) => {
       read,
       content,
       cover: newPath ? newPath : postDoc.cover,
-      author: info.UserId,
+      author: user._id,
     });
 
     res.json(postDoc);
-  });
+  }
 });
 
 // create story
-router.post("/story", uploadMiddleware.single("file"), async (req, res) => {
+router.post("/story/:id", uploadMiddleware.single("file"), async (req, res) => {
   mongoose.connect(
     "mongodb+srv://walidait:samyboy2001..@cluster0.ksqig4m.mongodb.net/?retryWrites=true&w=majority"
   );
@@ -347,36 +347,42 @@ router.post("/story", uploadMiddleware.single("file"), async (req, res) => {
   const newpath = path.replace(/\\/g, "/");
   const newPath = await uploadToS3(newpath, originalname, mimetype);
 
-  const { token } = req.cookies;
-  try {
-    jwt.verify(token, process.env.JWT_SECRET, {}, async (err, info) => {
-      if (err) throw err;
+  const { id } = req.params;
 
+  try {
+    const user = await UserModel.findById(id);
+
+    if (!user) {
+      res.status(401).json("authorization failed");
+    } else {
       const storyDoc = await storyModel.create({
         cover: newPath,
-        author: info.UserId,
+        author: user._id,
       });
 
       res.json(storyDoc);
-    });
+    }
   } catch (error) {
     res.json(error);
   }
 });
 
 //get stories
-
 router.get("/story", async (req, res) => {
   mongoose.connect(
     "mongodb+srv://walidait:samyboy2001..@cluster0.ksqig4m.mongodb.net/?retryWrites=true&w=majority"
   );
 
-  res.json(
-    await storyModel
-      .find()
-      .populate("author", ["fullname", "profile"])
-      .sort({ createdAt: -1 })
-  );
+  try {
+    res.json(
+      await storyModel
+        .find()
+        .populate("author", ["fullname", "profile"])
+        .sort({ createdAt: -1 })
+    );
+  } catch (error) {
+    res.status(404).json("Error");
+  }
 });
 
 //delete story
@@ -386,44 +392,41 @@ router.delete("/story/:id", async (req, res) => {
   );
 
   const { id } = req.params;
+  try {
+    await storyModel.findByIdAndDelete(id);
 
-  await storyModel.findByIdAndDelete(id);
-
-  res.json("ok");
+    res.json("ok");
+  } catch (error) {
+    res.status(404).json("Error");
+  }
 });
 
 //add followers
-router.post("/users/:userId", async (req, res) => {
+router.post("/users/:userId/:followerId", async (req, res) => {
   mongoose.connect(
     "mongodb+srv://walidait:samyboy2001..@cluster0.ksqig4m.mongodb.net/?retryWrites=true&w=majority"
   );
 
-  const { userId } = req.params;
+  const { userId, followerId } = req.params;
 
-  const { token } = req.cookies;
+  // Find the user to be followed
+  const userToFollow = await UserModel.findById(userId);
+  if (!userToFollow) {
+    return res.status(404).json({ error: "User not found" });
+  }
 
-  jwt.verify(token, process.env.JWT_SECRET, {}, async (err, info) => {
-    if (err) throw err;
+  // Check if the follower exists
+  const follower = await UserModel.findById(followerId);
+  if (!follower) {
+    return res.status(404).json({ error: "Follower not found" });
+  }
 
-    const followerId = info.UserId;
+  // Check if the follower is already in the followers list
+  if (userToFollow.followers.includes(followerId)) {
+    return res.status(400).json({ error: "Follower already exists" });
+  }
 
-    // Find the user to be followed
-    const userToFollow = await UserModel.findById(userId);
-    if (!userToFollow) {
-      return res.status(404).json({ error: "User not found" });
-    }
-
-    // Check if the follower exists
-    const follower = await UserModel.findById(followerId);
-    if (!follower) {
-      return res.status(404).json({ error: "Follower not found" });
-    }
-
-    // Check if the follower is already in the followers list
-    if (userToFollow.followers.includes(followerId)) {
-      return res.status(400).json({ error: "Follower already exists" });
-    }
-
+  try {
     // Update the user's followers array
     userToFollow.followers.push(followerId);
     await userToFollow.save();
@@ -432,36 +435,32 @@ router.post("/users/:userId", async (req, res) => {
       message: "Follower added successfully",
       data: userToFollow.followers.length,
     });
-  });
+  } catch (error) {
+    res.status(401).json("Unable to follow");
+  }
 });
 
 //remove follower
-router.delete("/users/:userId", async (req, res) => {
+router.delete("/users/:userId/:followerId", async (req, res) => {
   mongoose.connect(
     "mongodb+srv://walidait:samyboy2001..@cluster0.ksqig4m.mongodb.net/?retryWrites=true&w=majority"
   );
 
-  const { userId } = req.params;
+  const { userId, followerId } = req.params;
 
-  const { token } = req.cookies;
+  // Find the user to be followed
+  const userToFollow = await UserModel.findById(userId);
+  if (!userToFollow) {
+    return res.status(404).json({ error: "User not found" });
+  }
 
-  jwt.verify(token, process.env.JWT_SECRET, {}, async (err, info) => {
-    if (err) throw err;
+  // Check if the follower exists
+  const follower = await UserModel.findById(followerId);
+  if (!follower) {
+    return res.status(404).json({ error: "Follower not found" });
+  }
 
-    const followerId = info.UserId;
-
-    // Find the user to be followed
-    const userToFollow = await UserModel.findById(userId);
-    if (!userToFollow) {
-      return res.status(404).json({ error: "User not found" });
-    }
-
-    // Check if the follower exists
-    const follower = await UserModel.findById(followerId);
-    if (!follower) {
-      return res.status(404).json({ error: "Follower not found" });
-    }
-
+  try {
     // Check if the follower is already in the followers list
     if (userToFollow.followers.includes(followerId)) {
       // Update the user's followers array
@@ -474,7 +473,9 @@ router.delete("/users/:userId", async (req, res) => {
     return res.status(200).json({
       message: "Follower removed successfully",
     });
-  });
+  } catch (error) {
+    res.status(401).json("Unable to unfollow");
+  }
 });
 
 export default router;
