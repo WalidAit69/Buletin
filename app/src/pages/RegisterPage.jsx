@@ -19,6 +19,7 @@ import "react-toastify/dist/ReactToastify.css";
 
 function RegisterPage() {
   const navigate = useNavigate();
+  const [isLoading, setisLoading] = useState(false);
 
   const schema = yup.object().shape({
     fullname: yup.string().required("Full Name is required"),
@@ -37,6 +38,7 @@ function RegisterPage() {
 
   const signup = async () => {
     try {
+      setisLoading(true);
       const config = {
         headers: {
           "Content-Type": "application/json",
@@ -51,9 +53,11 @@ function RegisterPage() {
         },
         config
       );
+      setisLoading(false);
       console.log(response);
       navigate("/login");
     } catch (error) {
+      setisLoading(false);
       toast.error(error?.response?.data?.msg);
       console.log(error);
     }
@@ -136,9 +140,9 @@ function RegisterPage() {
             </div>
 
             <div className="right_cta">
-              <button type="submit" id="right_cta_login" onClick={toasts}>
+              {!isLoading ? <button type="submit" id="right_cta_login" onClick={toasts}>
                 Create account
-              </button>
+              </button>:<button id="right_cta_login"><span className="loader"></span></button>}
               <button type="submit" id="right_cta_google">
                 <FcGoogle fontSize={"25px"}></FcGoogle>Sign up with Google
               </button>

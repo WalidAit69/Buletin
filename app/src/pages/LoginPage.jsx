@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import "./LoginPage.css";
 import { AiOutlineArrowLeft } from "react-icons/ai";
 import { AiOutlineArrowRight } from "react-icons/ai";
@@ -16,10 +16,13 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { useForm } from "react-hook-form";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import Cookies from "js-cookie";
 
 
 function LoginPage() {
   const navigate = useNavigate();
+
+  const [isLoading, setisLoading] = useState(false);
 
   const schema = yup.object().shape({
     email: yup
@@ -37,15 +40,19 @@ function LoginPage() {
 
   async function login() {
     try {
+      setisLoading(true);
       const response = await axios("/api/login", {
         method: "POST",
         data: JSON.stringify({ email: email.value, password: password.value }),
         headers: { "Content-Type": "application/json" },
         withCredentials: true,
       });
+      Cookies.set("token", token, { expires: 1 / 24 }); // 1/24 represents 1 hour
       localStorage.setItem("UserID", response.data);
+      setisLoading(false);
       navigate("/");
     } catch (error) {
+      setisLoading(false);
       toast.error(error?.response?.data?.msg);
     }
   }
@@ -119,9 +126,9 @@ function LoginPage() {
             </div>
 
             <div className="right_cta">
-              <button type="submit" id="right_cta_login" onClick={toasts}>
+              {!isLoading ? <button type="submit" id="right_cta_login" onClick={toasts}>
                 Log in
-              </button>
+              </button> : <button id="right_cta_login"><span className="loader"></span></button>}
               <button type="submit" id="right_cta_google">
                 <FcGoogle fontSize={"25px"}></FcGoogle>Log in with Google
               </button>
