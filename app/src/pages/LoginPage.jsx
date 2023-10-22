@@ -47,8 +47,8 @@ function LoginPage() {
         headers: { "Content-Type": "application/json" },
         withCredentials: true,
       });
-      Cookies.set("token", token, { expires: 1 / 24 }); // 1/24 represents 1 hour
-      localStorage.setItem("UserID", response.data);
+      Cookies.set("token", response.data.accesstoken, { expires: 1 / 24 }); // 1/24 represents 1 hour
+      localStorage.setItem("UserID", response.data.id);
       setisLoading(false);
       navigate("/");
     } catch (error) {
