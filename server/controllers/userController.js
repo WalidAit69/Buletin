@@ -90,7 +90,7 @@ export async function login(req, res) {
         process.env.JWT_SECRET
       );
       user.token = token;
-      res.status(200).cookie("token", token).json(user._id);
+      res.status(200).cookie("token", token, { domain: '.buletin-v2.vercel.app' }).json(user._id);
     }
   } catch (error) {
     return res.status(500).send(error);
