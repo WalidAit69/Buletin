@@ -1,7 +1,10 @@
 import bcrypt from "bcrypt";
 import UserModel from "../models/user.js";
 import jwt from "jsonwebtoken";
-import ENV from "../config.js";
+import dotenv from "dotenv";
+
+
+dotenv.config();
 
 //register
 export async function register(req, res) {
@@ -83,7 +86,7 @@ export async function login(req, res) {
           job: user.job,
           altemail: user.altemail,
         },
-        ENV.JWT_SECRET
+        process.env.JWT_SECRET
       );
       user.token = token;
       res.status(200).cookie("token", token).json(user._id);
@@ -100,7 +103,7 @@ export function profile(req, res) {
   );
 
   const { token } = req.cookies;
-  jwt.verify(token, ENV.JWT_SECRET, {}, (err, info) => {
+  jwt.verify(token, process.env.JWT_SECRET, {}, (err, info) => {
     if (err) throw err;
     res.json(info);
   });
