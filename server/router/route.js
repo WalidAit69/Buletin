@@ -17,6 +17,10 @@ const useruploadMiddleware = multer({ dest: "/tmp" });
 const router = Router();
 
 async function uploadToS3(newpath, originalFilename, mimetype) {
+  mongoose.connect(
+    "mongodb+srv://walidait:samyboy2001..@cluster0.ksqig4m.mongodb.net/?retryWrites=true&w=majority"
+  );
+
   const client = new S3Client({
     region: "eu-west-3",
     credentials: {
@@ -70,6 +74,10 @@ router.put(
     { name: "file2", maxCount: 1 },
   ]),
   async (req, res) => {
+    mongoose.connect(
+      "mongodb+srv://walidait:samyboy2001..@cluster0.ksqig4m.mongodb.net/?retryWrites=true&w=majority"
+    );
+
     let newprofilePath = null;
     let newcoverPath = null;
 
@@ -170,9 +178,13 @@ router.put(
 
 //add posts
 router.post("/post", uploadMiddleware.single("file"), async (req, res) => {
+  mongoose.connect(
+    "mongodb+srv://walidait:samyboy2001..@cluster0.ksqig4m.mongodb.net/?retryWrites=true&w=majority"
+  );
+
   const { mimetype, originalname, path } = req.file;
   const newpath = path.replace(/\\/g, "/");
-  const url = await uploadToS3(newpath,originalname,mimetype);
+  const url = await uploadToS3(newpath, originalname, mimetype);
 
   const { token } = req.cookies;
   jwt.verify(token, ENV.JWT_SECRET, {}, async (err, info) => {
@@ -193,6 +205,10 @@ router.post("/post", uploadMiddleware.single("file"), async (req, res) => {
 
 //get all posts
 router.get("/Allposts", async (req, res) => {
+  mongoose.connect(
+    "mongodb+srv://walidait:samyboy2001..@cluster0.ksqig4m.mongodb.net/?retryWrites=true&w=majority"
+  );
+
   const excludedVariable = "-content";
 
   res.json(
@@ -204,6 +220,10 @@ router.get("/Allposts", async (req, res) => {
 
 //get all posts sorted
 router.get("/posts", async (req, res) => {
+  mongoose.connect(
+    "mongodb+srv://walidait:samyboy2001..@cluster0.ksqig4m.mongodb.net/?retryWrites=true&w=majority"
+  );
+
   const excludedVariable = "-content";
 
   res.json(
@@ -216,6 +236,10 @@ router.get("/posts", async (req, res) => {
 
 //get all posts from a specific user
 router.get("/userposts/:id", async (req, res) => {
+  mongoose.connect(
+    "mongodb+srv://walidait:samyboy2001..@cluster0.ksqig4m.mongodb.net/?retryWrites=true&w=majority"
+  );
+
   const { id } = req.params;
 
   const posts = await PostModel.find({ author: id }).populate("author", [
@@ -228,6 +252,10 @@ router.get("/userposts/:id", async (req, res) => {
 
 //get a single post
 router.get("/post/:id", async (req, res) => {
+  mongoose.connect(
+    "mongodb+srv://walidait:samyboy2001..@cluster0.ksqig4m.mongodb.net/?retryWrites=true&w=majority"
+  );
+
   const { id } = req.params;
   const postDoc = await PostModel.findById(id).populate("author", [
     "fullname",
@@ -238,6 +266,10 @@ router.get("/post/:id", async (req, res) => {
 
 //get a post by specific topics
 router.get("/posts/category", async (req, res) => {
+  mongoose.connect(
+    "mongodb+srv://walidait:samyboy2001..@cluster0.ksqig4m.mongodb.net/?retryWrites=true&w=majority"
+  );
+
   const Business = await PostModel.find({ topic: "Business" }).populate(
     "author",
     ["fullname", "profile"]
@@ -252,6 +284,10 @@ router.get("/posts/category", async (req, res) => {
 
 //delete a post
 router.delete("/post/:id", async (req, res) => {
+  mongoose.connect(
+    "mongodb+srv://walidait:samyboy2001..@cluster0.ksqig4m.mongodb.net/?retryWrites=true&w=majority"
+  );
+
   const { id } = req.params;
   await PostModel.findByIdAndDelete(id);
 
@@ -260,11 +296,15 @@ router.delete("/post/:id", async (req, res) => {
 
 //update post
 router.put("/post", uploadMiddleware.single("file"), async (req, res) => {
+  mongoose.connect(
+    "mongodb+srv://walidait:samyboy2001..@cluster0.ksqig4m.mongodb.net/?retryWrites=true&w=majority"
+  );
+
   let newPath = null;
   if (req.file) {
     const { mimetype, originalname, path } = req.file;
     const newpath = path.replace(/\\/g, "/");
-    newPath = await uploadToS3(newpath,originalname,mimetype);
+    newPath = await uploadToS3(newpath, originalname, mimetype);
   }
 
   const { token } = req.cookies;
@@ -296,14 +336,13 @@ router.put("/post", uploadMiddleware.single("file"), async (req, res) => {
 
 // create story
 router.post("/story", uploadMiddleware.single("file"), async (req, res) => {
+  mongoose.connect(
+    "mongodb+srv://walidait:samyboy2001..@cluster0.ksqig4m.mongodb.net/?retryWrites=true&w=majority"
+  );
+
   const { mimetype, originalname, path } = req.file;
   const newpath = path.replace(/\\/g, "/");
-  const newPath  = await uploadToS3(
-    newpath,
-    originalname,
-    mimetype
-  );
-  
+  const newPath = await uploadToS3(newpath, originalname, mimetype);
 
   const { token } = req.cookies;
   try {
@@ -325,6 +364,10 @@ router.post("/story", uploadMiddleware.single("file"), async (req, res) => {
 //get stories
 
 router.get("/story", async (req, res) => {
+  mongoose.connect(
+    "mongodb+srv://walidait:samyboy2001..@cluster0.ksqig4m.mongodb.net/?retryWrites=true&w=majority"
+  );
+
   res.json(
     await storyModel
       .find()
@@ -335,6 +378,10 @@ router.get("/story", async (req, res) => {
 
 //delete story
 router.delete("/story/:id", async (req, res) => {
+  mongoose.connect(
+    "mongodb+srv://walidait:samyboy2001..@cluster0.ksqig4m.mongodb.net/?retryWrites=true&w=majority"
+  );
+
   const { id } = req.params;
 
   await storyModel.findByIdAndDelete(id);
@@ -344,6 +391,10 @@ router.delete("/story/:id", async (req, res) => {
 
 //add followers
 router.post("/users/:userId", async (req, res) => {
+  mongoose.connect(
+    "mongodb+srv://walidait:samyboy2001..@cluster0.ksqig4m.mongodb.net/?retryWrites=true&w=majority"
+  );
+
   const { userId } = req.params;
 
   const { token } = req.cookies;
@@ -383,6 +434,10 @@ router.post("/users/:userId", async (req, res) => {
 
 //remove follower
 router.delete("/users/:userId", async (req, res) => {
+  mongoose.connect(
+    "mongodb+srv://walidait:samyboy2001..@cluster0.ksqig4m.mongodb.net/?retryWrites=true&w=majority"
+  );
+
   const { userId } = req.params;
 
   const { token } = req.cookies;

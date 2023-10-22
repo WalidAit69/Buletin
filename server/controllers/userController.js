@@ -3,11 +3,24 @@ import UserModel from "../models/user.js";
 import jwt from "jsonwebtoken";
 import ENV from "../config.js";
 
-
 //register
 export async function register(req, res) {
   try {
-    const { fullname, email, password, profile, website ,bio ,job ,altemail,cover } = req.body;
+    mongoose.connect(
+      "mongodb+srv://walidait:samyboy2001..@cluster0.ksqig4m.mongodb.net/?retryWrites=true&w=majority"
+    );
+
+    const {
+      fullname,
+      email,
+      password,
+      profile,
+      website,
+      bio,
+      job,
+      altemail,
+      cover,
+    } = req.body;
 
     if (!(email && password)) {
       res.status(400).send("All input is required");
@@ -41,10 +54,13 @@ export async function register(req, res) {
   }
 }
 
-
 //login
 export async function login(req, res) {
   try {
+    mongoose.connect(
+      "mongodb+srv://walidait:samyboy2001..@cluster0.ksqig4m.mongodb.net/?retryWrites=true&w=majority"
+    );
+
     const { email, password } = req.body;
 
     const user = await UserModel.findOne({ email });
@@ -77,9 +93,12 @@ export async function login(req, res) {
   }
 }
 
-
 //get profile by cookies
 export function profile(req, res) {
+  mongoose.connect(
+    "mongodb+srv://walidait:samyboy2001..@cluster0.ksqig4m.mongodb.net/?retryWrites=true&w=majority"
+  );
+
   const { token } = req.cookies;
   jwt.verify(token, ENV.JWT_SECRET, {}, (err, info) => {
     if (err) throw err;
@@ -87,27 +106,30 @@ export function profile(req, res) {
   });
 }
 
-
 //get profile by id
 export async function profilebyid(req, res) {
+  mongoose.connect(
+    "mongodb+srv://walidait:samyboy2001..@cluster0.ksqig4m.mongodb.net/?retryWrites=true&w=majority"
+  );
+
   const { id } = req.params;
   const user = await UserModel.findById(id);
   res.json(user);
 }
-
 
 //logout
 export function logout(req, res) {
   res.cookie("token", "").json("ok");
 }
 
-
 //get all users
 export async function users(req, res) {
+  mongoose.connect(
+    "mongodb+srv://walidait:samyboy2001..@cluster0.ksqig4m.mongodb.net/?retryWrites=true&w=majority"
+  );
+
   const exclud = "-password -email";
   const users = await UserModel.find().select(exclud);
 
   res.json(users);
 }
-
-
