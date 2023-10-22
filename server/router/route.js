@@ -4,17 +4,20 @@ import multer from "multer";
 import fs from "fs";
 import PostModel from "../models/post.js";
 import jwt from "jsonwebtoken";
-import ENV from "../config.js";
+import dotenv from "dotenv";
 import storyModel from "../models/story.js";
 import UserModel from "../models/user.js";
 import bcrypt from "bcrypt";
 import { PutObjectCommand, S3Client } from "@aws-sdk/client-s3";
+
 
 const uploadMiddleware = multer({ dest: "/tmp" });
 
 const useruploadMiddleware = multer({ dest: "/tmp" });
 
 const router = Router();
+
+dotenv.config();
 
 async function uploadToS3(newpath, originalFilename, mimetype) {
   mongoose.connect(
@@ -24,8 +27,8 @@ async function uploadToS3(newpath, originalFilename, mimetype) {
   const client = new S3Client({
     region: "eu-west-3",
     credentials: {
-      accessKeyId: ENV.S3_ACCESS_KEY,
-      secretAccessKey: ENV.S3_SECRET_ACCESS_KEY,
+      accessKeyId: process.env.S3_ACCESS_KEY,
+      secretAccessKey: process.env.S3_SECRET_ACCESS_KEY,
     },
   });
 
@@ -35,7 +38,7 @@ async function uploadToS3(newpath, originalFilename, mimetype) {
   try {
     const data = await client.send(
       new PutObjectCommand({
-        Bucket: ENV.BUCKETNAME,
+        Bucket: process.env.BUCKETNAME,
         Body: fs.readFileSync(newpath),
         Key: newFilename,
         ContentType: mimetype,
@@ -43,8 +46,7 @@ async function uploadToS3(newpath, originalFilename, mimetype) {
       })
     );
 
-    console.log({ data });
-    return `https://${ENV.BUCKETNAME}.s3.amazonaws.com/${newFilename}`;
+    return `https://${process.env.BUCKETNAME}.s3.amazonaws.com/${newFilename}`;
   } catch (error) {
     res.status(401).json("Error adding photo");
   }
@@ -169,7 +171,7 @@ router.put(
         job: job ? job : userDoc.job,
         altemail: altemail ? altemail : userDoc.altemail,
       },
-      ENV.JWT_SECRET
+      process.env.JWT_SECRET
     );
     userDoc.token = token;
     res.status(200).cookie("token", token).json(userDoc);
@@ -187,7 +189,7 @@ router.post("/post", uploadMiddleware.single("file"), async (req, res) => {
   const url = await uploadToS3(newpath, originalname, mimetype);
 
   const { token } = req.cookies;
-  jwt.verify(token, ENV.JWT_SECRET, {}, async (err, info) => {
+  jwt.verify(token, process.env.JWT_SECRET, {}, async (err, info) => {
     if (err) throw err;
     const { title, summary, topic, read, content } = req.body;
     const postDoc = await PostModel.create({
@@ -308,7 +310,7 @@ router.put("/post", uploadMiddleware.single("file"), async (req, res) => {
   }
 
   const { token } = req.cookies;
-  jwt.verify(token, ENV.JWT_SECRET, {}, async (err, info) => {
+  jwt.verify(token, process.env.JWT_SECRET, {}, async (err, info) => {
     if (err) throw err;
 
     const { id, title, summary, topic, read, content } = req.body;
@@ -346,7 +348,7 @@ router.post("/story", uploadMiddleware.single("file"), async (req, res) => {
 
   const { token } = req.cookies;
   try {
-    jwt.verify(token, ENV.JWT_SECRET, {}, async (err, info) => {
+    jwt.verify(token, process.env.JWT_SECRET, {}, async (err, info) => {
       if (err) throw err;
 
       const storyDoc = await storyModel.create({
@@ -399,7 +401,7 @@ router.post("/users/:userId", async (req, res) => {
 
   const { token } = req.cookies;
 
-  jwt.verify(token, ENV.JWT_SECRET, {}, async (err, info) => {
+  jwt.verify(token, process.env.JWT_SECRET, {}, async (err, info) => {
     if (err) throw err;
 
     const followerId = info.UserId;
@@ -442,7 +444,7 @@ router.delete("/users/:userId", async (req, res) => {
 
   const { token } = req.cookies;
 
-  jwt.verify(token, ENV.JWT_SECRET, {}, async (err, info) => {
+  jwt.verify(token, process.env.JWT_SECRET, {}, async (err, info) => {
     if (err) throw err;
 
     const followerId = info.UserId;
