@@ -11,9 +11,10 @@ function Header({ isStory, setisStory }) {
   const { setuserInfo, userInfo } = useContext(UserContext);
   const [IsMenuOpen, setIsMenuOpen] = useState(false);
 
+  const Userid = localStorage.getItem("UserID");
   useEffect(() => {
     axios
-      .get("/api/profile", {
+      .get(`/api/profile/${Userid}`, {
         withCredentials: true,
       })
       .then((response) => {

@@ -24,6 +24,8 @@ function EditPost() {
   const [isLoading, setisLoading] = useState(false);
 
   const { id } = useParams();
+  const Userid = localStorage.getItem("UserID");
+
 
   const today = new Date();
   const date = format(today, "d MMMM yyyy");
@@ -31,7 +33,7 @@ function EditPost() {
   const navigate = useNavigate();
 
   function profile() {
-    axios("/api/profile", {
+    axios(`/api/profile/${Userid}`, {
       method: "get",
       withCredentials: true,
     }).then((response) => {

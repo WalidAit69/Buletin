@@ -30,10 +30,10 @@ function CreatePost() {
 
   const { id } = useParams();
 
-
+  const Userid = localStorage.getItem("UserID");
 
   function profile() {
-    axios("/api/profile", {
+    axios(`/api/profile/${Userid}`, {
       method: "get",
       withCredentials: true,
     }).then((response) => {
