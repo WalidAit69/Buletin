@@ -1,0 +1,110 @@
+.title_section{
+    display: flex;
+    justify-content: center;
+    gap: 4rem;
+}
+
+.Categories_posts_title{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 97%;
+    margin-top: 5.5rem;
+}
+
+.posts_cards{
+    display: flex;
+    align-items: start;
+    flex-wrap: wrap;
+    gap: 3rem;
+}
+
+@media (width <= 1550px) {
+    .title_section{
+        display: flex;
+        gap: 2rem;
+    }
+    .posts_cards{
+        gap: 1.5rem;
+    }
+}
+
+@media (width <= 1300px) {
+    .title_section{
+        display: flex;
+        gap: 2rem;
+    }
+    .posts_cards{
+        gap: 1.5rem;
+    }
+}
+
+@media (width <= 1050px) {
+    .title_section{
+        display: flex;
+        gap: 0rem;
+    }
+    .posts_cards{
+        justify-content: center;
+        gap: 1rem;
+    }
+    .Categories_posts_title{
+        width: 60%;
+        margin-left: 4.5rem;
+    }
+}
+
+@media (width <= 900px) {
+    .posts_cards{
+        justify-content: center;
+        gap: 1rem;
+    }
+    .Categories_posts_title{
+        width: fit-content;
+        gap: 1rem;
+        margin-left: 4rem;
+    }
+}
+
+@media (width <= 750px) {
+    .Categories_posts_title{
+        width: fit-content;
+        gap: 1rem;
+        margin-left: 2.5rem;
+    }
+}
+
+@media (width <= 650px) {
+    .Categories_posts_title{
+        gap: .5rem;
+        margin-left: 1.3rem;
+    }
+}
+
+@media (width <= 550px) {
+    .Categories_posts_title{
+        gap: 1.5rem;
+        margin-left: 0rem;
+    }
+    .title_section{
+        gap: 1rem;
+    }
+    .posts_cards{
+        justify-content: start;
+    }
+}
+
+@media (width <= 500px) {
+    .Categories_posts_title{
+        gap: 1.5rem;
+        margin-left: 0rem;
+    }
+    .title_section{
+        display: flex;
+        flex-direction: column;
+    }
+    .posts_cards{
+        justify-content: start;
+    }
+}
+

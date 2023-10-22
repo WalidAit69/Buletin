@@ -1,0 +1,161 @@
+.Editorpick_cover {
+  position: relative;
+  height: 450px;
+  border-radius: 20px;
+  z-index: 0;
+}
+
+.Editorpick_cover_img {
+  height: 450px;
+  width: 100%;
+  object-fit: cover;
+  object-position: center;
+  border-radius: 20px;
+  transition: 0.5s;
+  z-index: 1000;
+}
+
+.Editorpick_cover img {
+  object-fit: cover;
+  object-position: center;
+  border-radius: 20px;
+}
+
+.Editorpick_cover_arrow {
+  z-index: -1000;
+}
+
+.Editorpick_cover:hover svg {
+  right: -50px;
+}
+
+.Editorpick_cover:hover .Editorpick_cover_img {
+  width: 80%;
+}
+
+.Editorpick_cover svg {
+  width: 120px;
+  position: absolute;
+  top: 50%;
+  right: 20%;
+  transform: translate(-50%, -50%);
+  cursor: pointer;
+  transition: 0.5s;
+  z-index: -1;
+}
+
+.Editorpick_cover svg:hover {
+  color: red;
+}
+
+.Editorpick_cover a {
+  color: black;
+}
+
+.Editorpick_info {
+  position: absolute;
+  bottom: 50px;
+  left: 50px;
+  color: white;
+  transition: 0.5s;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.Editorpick_info h1 {
+  filter: drop-shadow(5px 5px 10px #000000);
+}
+
+.Editorpick_info div {
+  display: flex;
+  align-items: center;
+  gap: .5rem;
+}
+
+.Editorpick_info div a {
+  display: flex;
+  align-items: center;
+  gap: .5rem;
+  color: white;
+  text-decoration: none;
+}
+
+
+.Editorpick_cover:hover .Editorpick_info {
+  transition: 0.5s;
+  width: 70%;
+}
+
+.Editorpick_info img {
+  width: 20px;
+  height: 20px;
+}
+
+.Editorpick .posts_title {
+  margin-bottom: 1.5rem;
+}
+
+.Editorpick_Allposts {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 1.5rem;
+  margin-top: 1.5rem;
+}
+
+@media (width <=1050px) {
+  .Editorpick_Allposts {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    column-gap: 4rem;
+    row-gap: 1rem;
+    margin-top: 1.5rem;
+  }
+}
+
+@media (width <=800px) {
+  .Editorpick_cover {
+    height: 350px;
+  }
+
+  .Editorpick_cover_img {
+    height: 350px;
+  }
+
+  .Editorpick_info h1 {
+    font-size: 1.5rem;
+    max-width: 90%;
+  }
+
+  .Editorpick_info p {
+    max-width: 90%;
+  }
+}
+
+@media (width <=650px) {
+  .Editorpick_info {
+    bottom: 25px;
+    left: 25px;
+  }
+  .Editorpick_info h1 {
+    font-size: 1.4rem;
+    max-width: 90%;
+  }
+}
+
+@media (width <=650px) {
+  .Editorpick_info {
+    bottom: 25px;
+    left: 25px;
+  }
+  .Editorpick_info h1 {
+    font-size: 1.4rem;
+    max-width: 90%;
+  }
+  .Editorpick_Allposts {
+    justify-content: start;
+
+  }
+}
