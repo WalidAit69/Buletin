@@ -12,14 +12,14 @@ function Header({ isStory, setisStory }) {
   const [IsMenuOpen, setIsMenuOpen] = useState(false);
 
   const Userid = localStorage.getItem("UserID");
+
+  async function Getuser() {
+    const res = await axios.get(`/api/profile/${Userid}`)
+    setuserInfo(res?.data);
+  }
+
   useEffect(() => {
-    axios
-      .get(`/api/profile/${Userid}`, {
-        withCredentials: true,
-      })
-      .then((response) => {
-        setuserInfo(response.data);
-      });
+    Getuser();
     const handleScroll = (event) => {
       document.querySelector("ul").classList.remove("responsive");
       document.querySelector(".nav_create").classList.remove("responsive");
@@ -37,6 +37,8 @@ function Header({ isStory, setisStory }) {
 
   const username = userInfo?.fullname;
   const id = userInfo?.UserId;
+
+  console.log(userInfo)
 
 
   const header = {
@@ -129,7 +131,7 @@ function Header({ isStory, setisStory }) {
                   </div>
                 </Link>
 
-                {userInfo.profile ? (
+                {userInfo?.profile ? (
                   <Link to={"/profile/" + id} href="">
                     <Image src={userInfo.profile} className="header_img" alt="" />
                   </Link>

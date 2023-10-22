@@ -60,7 +60,7 @@ router.route("/register").post(userController.register);
 router.route("/login").post(userController.login);
 
 // get single profile api
-router.route("/profile").get(userController.profile);
+// router.route("/profile").get(userController.profile);
 router.route("/profile/:id").get(userController.profilebyid);
 
 // logout api
