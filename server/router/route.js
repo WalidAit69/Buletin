@@ -9,6 +9,7 @@ import storyModel from "../models/story.js";
 import UserModel from "../models/user.js";
 import bcrypt from "bcryptjs";
 import { PutObjectCommand, S3Client } from "@aws-sdk/client-s3";
+import mongoose from "mongoose";
 
 
 const uploadMiddleware = multer({ dest: "/tmp" });
