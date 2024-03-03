@@ -27,26 +27,26 @@ function Main_Card({ posts }) {
         <Image src={randompost?.cover} alt="" />
       </Link>
       <div className="main_card_info">
-          <div className="main_card_name_date">
-            <Link to={`/user/${randompost?.author?._id}`}>
-              {randompost?.author?.profile && (
-                <Image
-                  className="Editorpick_info_img"
-                  src={randompost?.author?.profile}
-                />
-              )}
-              {randompost?.author?.fullname}
-            </Link>{" "}
-            -
-            {
-              <ReactTimeAgo
-                date={timestamp ? timestamp : "2023-08-22T10:12:34.922Z"}
-                locale="en-US"
-                timeStyle="long"
-                className="custom-timeago"
+        <div className="main_card_name_date">
+          <Link to={`/user/${randompost?.author?._id}`}>
+            {randompost?.author?.profile && (
+              <Image
+                className="Editorpick_info_img"
+                src={randompost?.author?.profile}
               />
-            }
-          </div>
+            )}
+            {randompost?.author?.fullname}
+          </Link>{" "}
+          -
+          {
+            <ReactTimeAgo
+              date={timestamp && timestamp}
+              locale="en-US"
+              timeStyle="long"
+              className="custom-timeago"
+            />
+          }
+        </div>
         <h2 className="main_card_title">{randompost?.title}</h2>
         <p className="main_card_description">{randompost?.summary}</p>
 
