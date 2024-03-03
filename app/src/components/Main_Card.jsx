@@ -25,7 +25,7 @@ function Main_Card({ posts }) {
 
   return (
     <div className="main_card">
-      <Skeleton className="main_card_img" />
+      <Skeleton count={2} />
       <Link to={"/post/" + randompost?._id}>
         {randompost?.cover ? <Image className="main_card_img" src={randompost?.cover} alt="" /> : <Skeleton className="main_card_img" />}
       </Link>
