@@ -38,9 +38,9 @@ function Main_Card({ posts }) {
             {randompost?.author?.fullname}
           </Link>{" "}
           -
-          {
+          {timestamp &&
             <ReactTimeAgo
-              date={timestamp && timestamp}
+              date={timestamp}
               locale="en-US"
               timeStyle="long"
               className="custom-timeago"
