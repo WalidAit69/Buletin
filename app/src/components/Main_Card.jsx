@@ -3,6 +3,8 @@ import "./Main_card.css";
 import { Link } from "react-router-dom";
 import ReactTimeAgo from "react-time-ago";
 import Image from "./Image";
+import Skeleton from 'react-loading-skeleton'
+import 'react-loading-skeleton/dist/skeleton.css'
 
 function Main_Card({ posts }) {
   const [randompost, setrandompost] = useState("");
@@ -24,7 +26,7 @@ function Main_Card({ posts }) {
   return (
     <div className="main_card">
       <Link to={"/post/" + randompost?._id}>
-        <Image src={randompost?.cover} alt="" />
+        {randompost?.cover ? <Image className="main_card_img" src={randompost?.cover} alt="" /> : <Skeleton className="main_card_img" />}
       </Link>
       <div className="main_card_info">
         <div className="main_card_name_date">
@@ -40,7 +42,7 @@ function Main_Card({ posts }) {
           -
           {
             <ReactTimeAgo
-              date={timestamp ? timestamp : "2023-08-22T10:12:34.922Z"}
+              date={randompost?.createdAt ? randompost?.createdAt : "2024-02-22T10:12:34.922Z"}
               locale="en-US"
               timeStyle="long"
               className="custom-timeago"

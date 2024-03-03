@@ -4,7 +4,7 @@
   gap: 4rem;
 }
 
-.main_card img {
+.main_card_img {
   height: 500px;
   width: 700px;
   border-radius: 30px;
@@ -14,7 +14,7 @@
   transition: 0.3s;
 }
 
-.main_card img:hover {
+.main_card_img:hover {
   transform: scale(1.03);
   transition: 0.3s;
 }
@@ -98,7 +98,7 @@
     gap: 3rem;
   }
 
-  .main_card img {
+  .main_card_img {
     height: 300px;
     width: 400px;
   }
@@ -128,7 +128,7 @@
     gap: 1.5rem;
     justify-content: center;
   }
-  .main_card img {
+  .main_card_img {
     height: 300px;
     width: 350px;
   }
@@ -151,7 +151,7 @@
     justify-content: center;
     flex-direction: column;
   }
-  .main_card img {
+  .main_card_img {
     height: 300px;
     width: 500px;
   }
@@ -175,7 +175,7 @@
   .main_card {
     gap: .5rem;
   }
-  .main_card img {
+  .main_card_img {
     height: 250px;
     width: 450px;
   }
@@ -189,7 +189,7 @@
   .main_card {
     gap: .5rem;
   }
-  .main_card img {
+  .main_card_img {
     height: 220px;
     width: 350px;
   }
