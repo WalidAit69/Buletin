@@ -40,7 +40,7 @@ function Main_Card({ posts }) {
           -
           {
             <ReactTimeAgo
-              date={timestamp ? timestamp : ""}
+              date={timestamp ? timestamp : "2023-08-22T10:12:34.922Z"}
               locale="en-US"
               timeStyle="long"
               className="custom-timeago"
