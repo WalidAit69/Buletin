@@ -76,9 +76,11 @@
   font-size: 0.9rem;
 }
 
-.main_card_name_date a img {
+.main_card_name_date .Editorpick_info_img {
   width: 30px;
   height: 30px;
+  border-radius: 50%;
+  object-fit: cover;
 }
 
 .main_card_name_date a img:hover {

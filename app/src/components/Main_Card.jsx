@@ -3,8 +3,8 @@ import "./Main_card.css";
 import { Link } from "react-router-dom";
 import ReactTimeAgo from "react-time-ago";
 import Image from "./Image";
-import Skeleton from 'react-loading-skeleton'
 import 'react-loading-skeleton/dist/skeleton.css'
+import Skeleton from "../widgets/Skeleton";
 
 function Main_Card({ posts }) {
   const [randompost, setrandompost] = useState("");
@@ -25,23 +25,24 @@ function Main_Card({ posts }) {
 
   return (
     <div className="main_card">
-      <Skeleton count={2} />
       <Link to={"/post/" + randompost?._id}>
-        {!randompost?.cover ? <Image className="main_card_img" src={randompost?.cover} alt="" /> : <Skeleton className="main_card_img" />}
+        {randompost?.cover ? <Image className="main_card_img" src={randompost?.cover} alt="" /> : <Skeleton className="main_card_img" />}
       </Link>
       <div className="main_card_info">
         <div className="main_card_name_date">
-          <Link to={`/user/${randompost?.author?._id}`}>
-            {randompost?.author?.profile && (
-              <Image
-                className="Editorpick_info_img"
-                src={randompost?.author?.profile}
-              />
-            )}
+          {randompost?.author?.profile ? <Link to={`/user/${randompost?.author?._id}`}>
+            <Image
+              className="Editorpick_info_img"
+              src={randompost?.author?.profile}
+            />
             {randompost?.author?.fullname}
-          </Link>{" "}
-          -
-          {
+            -
+          </Link> : <>
+            <Skeleton className={'Editorpick_info_img'} />
+            <Skeleton height='10px' width='200px' />
+          </>}
+
+          {randompost?.author?.fullname &&
             <ReactTimeAgo
               date={randompost?.createdAt ? randompost?.createdAt : "2024-02-22T10:12:34.922Z"}
               locale="en-US"
