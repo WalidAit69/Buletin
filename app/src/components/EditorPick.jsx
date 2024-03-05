@@ -36,38 +36,40 @@ function MustRead({ unsortedposts }) {
       </div>
 
       <div className="Editorpick_posts">
-        <Link to={`post/${randompost._id}`}>
 
-          <div className="Editorpick_cover">
+        <div className="Editorpick_cover">
+
+          <Link to={`post/${randompost._id}`}>
             <Image
               className="Editorpick_cover_img"
               src={randompost.cover}
               alt={randompost.title}
             />
+          </Link>
 
-            <div className="Editorpick_info">
+          <div className="Editorpick_info">
 
-              <div>
-                <Link to={`/user/${randompost?.author?._id}`}>
-                  {profile && <Image className="Editorpick_info_img" src={profile} />}
-                  {randompost?.author?.fullname}</Link> -
-                {
-                  <ReactTimeAgo
-                    date={timestamp ? timestamp : "2023-08-22T10:12:34.922Z"}
-                    locale="en-US"
-                    timeStyle="long"
-                    className="custom-timeago"
-                  />
-                }
-              </div>
-              <h1>{randompost.title}</h1>
-              <p>{truncatesummary}</p>
-              <div>
-                {randompost.topic} - {randompost.read} read
-              </div>
+            <div>
+              <Link to={`/user/${randompost?.author?._id}`}>
+                {profile && <Image className="Editorpick_info_img" src={profile} />}
+                {randompost?.author?.fullname}</Link> -
+              {
+                <ReactTimeAgo
+                  date={timestamp ? timestamp : "2023-08-22T10:12:34.922Z"}
+                  locale="en-US"
+                  timeStyle="long"
+                  className="custom-timeago"
+                />
+              }
+            </div>
+            <h1>{randompost.title}</h1>
+            <p>{truncatesummary}</p>
+            <div>
+              {randompost.topic} - {randompost.read} read
             </div>
           </div>
-        </Link>
+        </div>
+
 
 
         <div className="Editorpick_Allposts">
