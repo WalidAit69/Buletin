@@ -8,6 +8,7 @@ import Skeleton from "../widgets/Skeleton";
 
 function Main_Card({ posts }) {
   const [randompost, setrandompost] = useState("");
+  const [screenWidth, setscreenWidth] = useState();
   const [timestamp, settimestamp] = useState(new Date());
 
   function randomPost() {
@@ -21,6 +22,12 @@ function Main_Card({ posts }) {
   useEffect(() => {
     randomPost();
   }, [posts]);
+
+
+  useEffect(() => {
+    setscreenWidth(window.innerWidth);
+
+  }, [window.innerWidth])
 
 
   return (
@@ -51,7 +58,7 @@ function Main_Card({ posts }) {
             />
           }
         </div>
-        {randompost?.title ? <h2 className="main_card_title">{randompost?.title}</h2> : <Skeleton className={'mt-1'} height='18px' width='150%' />}
+        {randompost?.title ? <h2 className="main_card_title">{randompost?.title}</h2> : <Skeleton className={'mt-1'} height='18px' width={screenWidth > 500 ? '130%' : '100%'} />}
         {randompost?.summary ? <p className="main_card_description">{randompost?.summary}</p> : <Skeleton className={'mt-1'} height='18px' width='300px ' />}
 
         <div className="main_card_type">

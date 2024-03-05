@@ -3,7 +3,7 @@ import "./Contact.css";
 
 function Contact() {
   return (
-    <div className="container Contact_page">
+    <div className="Contact_page">
       <div className="Contact_page_layout">
         <div className="Contact_title">
           <p>Get first update</p>

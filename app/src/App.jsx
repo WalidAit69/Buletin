@@ -21,6 +21,7 @@ import ProfilesPage from "./pages/ProfilesPage";
 import AllPosts from "./pages/AllPosts";
 import MustRead from "./components/EditorPick";
 import Contact from "./widgets/Contact";
+import Skeleton from "./widgets/Skeleton.jsx";
 
 
 axios.defaults.baseURL = import.meta.env.VITE_API_BASE_URL;
@@ -52,8 +53,8 @@ function App() {
     }
   }
 
-  function GetAllPosts(){
-    axios.get(`/api/Allposts`).then((res) =>{
+  function GetAllPosts() {
+    axios.get(`/api/Allposts`).then((res) => {
       setunsortedposts(res.data)
     });
   }
@@ -64,6 +65,8 @@ function App() {
     Profile();
     GetAllPosts();
   }, []);
+
+  const skeletonData = Array(4).fill(null);
 
   return (
     <UserContextProvider>
@@ -108,9 +111,19 @@ function App() {
 
                   {posts.length > 0
                     ? posts
-                        .slice(0, 4)
-                        .map((post) => <Cards key={post._id} {...post}></Cards>)
-                    : "No posts"}
+                      .slice(0, 4)
+                      .map((post) => <Cards key={post._id} {...post}></Cards>)
+                    : <div className="posts">
+                      {skeletonData.map((_, index) => (
+                        <div key={index} className="card">
+                          <Skeleton className={'card_img'} />
+                          <div>
+                            <Skeleton className={'mt-2'} height='16px' width='200px' />
+                            <Skeleton className={'mt-1'} height='13px' width='200px' />
+                          </div>
+                        </div>
+                      ))}
+                    </div>}
                 </div>
 
                 <Buletin_story></Buletin_story>

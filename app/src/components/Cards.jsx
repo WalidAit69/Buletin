@@ -3,6 +3,7 @@ import "./Cards.css";
 import { Link } from "react-router-dom";
 import { format } from "date-fns";
 import Image from "./Image";
+import Skeleton from "../widgets/Skeleton";
 
 function Cards({ _id, title, summary, topic, read, cover, createdAt, author }) {
   const today = new Date(createdAt);

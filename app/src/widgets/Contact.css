@@ -102,3 +102,17 @@
     width: 100%;
   }
 }
+
+@media (width <=500px) {
+  .Contact_title h1 {
+    font-size: 1.1rem;
+  }
+
+  .Contact_form{
+    flex-direction: column;
+  }
+
+  .Contact_form input{
+    width: 100%;
+  }
+}

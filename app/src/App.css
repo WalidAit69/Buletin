@@ -240,6 +240,7 @@ header nav {
   background-color: #e0e0e0;
   overflow: hidden;
   position: relative;
+  border-radius: 5px;
 }
 
 .Skeleton::before {
@@ -451,7 +452,9 @@ header nav {
 
 @media (width <=500px) {
   .container {
-    max-width: 350px;
+    max-width: 100%;
+    padding: 0 1rem;
+    overflow: hidden;
     margin: 0 auto;
   }
 
