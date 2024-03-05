@@ -51,17 +51,17 @@ function Main_Card({ posts }) {
             />
           }
         </div>
-        <h2 className="main_card_title">{randompost?.title}</h2>
-        <p className="main_card_description">{randompost?.summary}</p>
+        {randompost?.title ? <h2 className="main_card_title">{randompost?.title}</h2> : <Skeleton className={'mt-1'} height='18px' width='150%' />}
+        {randompost?.summary ? <p className="main_card_description">{randompost?.summary}</p> : <Skeleton className={'mt-1'} height='18px' width='300px ' />}
 
         <div className="main_card_type">
-          <p>
+          {randompost?.topic ? <p>
             {randompost?.topic}{" "}
             <span>- {randompost?.read ? randompost?.read + " read" : ""}</span>
-          </p>
+          </p> : <Skeleton className={'mt-2'} height='10px' width='200px' />}
         </div>
       </div>
-    </div>
+    </div >
   );
 }
 

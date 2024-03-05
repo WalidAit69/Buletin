@@ -231,10 +231,11 @@ header nav {
   }
 }
 
-.test{
+.test {
   width: 200px;
   height: 200px;
 }
+
 .Skeleton {
   background-color: #e0e0e0;
   overflow: hidden;
@@ -250,6 +251,18 @@ header nav {
   height: 100%;
   background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.605), transparent);
   animation: loading 1.5s infinite;
+}
+
+.mt-1 {
+  margin-top: 10px;
+}
+
+.mt-2 {
+  margin-top: 20px;
+}
+
+.mb-1 {
+  margin-bottom: 10px;
 }
 
 @keyframes loading {
