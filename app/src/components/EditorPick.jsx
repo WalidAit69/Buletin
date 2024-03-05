@@ -4,6 +4,7 @@ import Cards from "./Cards";
 import { Link } from "react-router-dom";
 import ReactTimeAgo from "react-time-ago";
 import Image from "./Image";
+import Skeleton from "../widgets/Skeleton";
 
 
 
@@ -29,6 +30,8 @@ function MustRead({ unsortedposts }) {
 
   const profile = randompost?.author?.profile;
 
+  const skeletonData = Array(4).fill(null);
+
   return (
     <div className="Editorpick">
       <div className="posts_title">
@@ -37,7 +40,7 @@ function MustRead({ unsortedposts }) {
 
       <div className="Editorpick_posts">
 
-        <div className="Editorpick_cover">
+        {randompost._id ? <div className="Editorpick_cover">
 
           <Link to={`post/${randompost._id}`}>
             <Image
@@ -68,12 +71,23 @@ function MustRead({ unsortedposts }) {
               {randompost.topic} - {randompost.read} read
             </div>
           </div>
-        </div>
+        </div> : <Skeleton className={'Editorpick_cover_img'} />}
 
 
 
         <div className="Editorpick_Allposts">
-          {unsortedposts.length > 0 && unsortedposts.slice(0, 4).map((post) => <Cards key={post._id} {...post}></Cards>)}
+          {unsortedposts.length > 0 ? unsortedposts.slice(0, 4).map((post) => <Cards key={post._id} {...post}></Cards>) :
+            <>
+              {skeletonData.map((_, index) => (
+                <div key={index} className="card">
+                  <Skeleton className={'card_img'} />
+                  <div>
+                    <Skeleton className={'mt-2'} height='16px' width='200px' />
+                    <Skeleton className={'mt-1'} height='13px' width='200px' />
+                  </div>
+                </div>
+              ))}
+            </>}
         </div>
 
       </div>

@@ -3,6 +3,7 @@ import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import "./Categories.css";
 import Cards from "./Cards";
+import Skeleton from "../widgets/Skeleton";
 
 
 function Categories() {
@@ -20,6 +21,8 @@ function Categories() {
   useEffect(() => {
     getByCategorie();
   }, []);
+
+  const skeletonData = Array(2).fill(null);
 
   return (
     <div className="Categories_section">
@@ -47,10 +50,21 @@ function Categories() {
           </div>
 
           <div className="posts_cards">
-            {Business.length > 0 &&
+            {Business.length > 0 ?
               Business.slice(0, 2).map((post) => (
                 <Cards key={post._id} {...post}></Cards>
-              ))}
+              )) :
+              <>
+                {skeletonData.map((_, index) => (
+                  <div key={index} className="card">
+                    <Skeleton className={'card_img'} />
+                    <div>
+                      <Skeleton className={'mt-2'} height='16px' width='200px' />
+                      <Skeleton className={'mt-1'} height='13px' width='200px' />
+                    </div>
+                  </div>
+                ))}
+              </>}
           </div>
         </div>
 
@@ -77,10 +91,20 @@ function Categories() {
           </div>
 
           <div className="posts_cards">
-            {Sport.length > 0 &&
+            {Sport.length > 0 ?
               Sport.slice(0, 2).map((post) => (
                 <Cards key={post._id} {...post}></Cards>
-              ))}
+              )) : <>
+                {skeletonData.map((_, index) => (
+                  <div key={index} className="card">
+                    <Skeleton className={'card_img'} />
+                    <div>
+                      <Skeleton className={'mt-2'} height='16px' width='200px' />
+                      <Skeleton className={'mt-1'} height='13px' width='200px' />
+                    </div>
+                  </div>
+                ))}
+              </>}
           </div>
         </div>
       </div>
