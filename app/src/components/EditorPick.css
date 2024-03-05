@@ -25,29 +25,6 @@
   z-index: -1000;
 }
 
-.Editorpick_cover:hover svg {
-  right: -50px;
-}
-
-.Editorpick_cover:hover .Editorpick_cover_img {
-  width: 80%;
-}
-
-.Editorpick_cover svg {
-  width: 120px;
-  position: absolute;
-  top: 50%;
-  right: 20%;
-  transform: translate(-50%, -50%);
-  cursor: pointer;
-  transition: 0.5s;
-  z-index: -1;
-}
-
-.Editorpick_cover svg:hover {
-  color: red;
-}
-
 .Editorpick_cover a {
   color: black;
 }
