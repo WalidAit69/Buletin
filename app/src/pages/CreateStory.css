@@ -1,6 +1,6 @@
 .story_section {
     background-color: #1a1a1a;
-    height: 90vh;
+    height: calc(100vh - 50px);
 }
 
 .story_container {
@@ -8,6 +8,7 @@
     align-items: center;
     gap: 5rem;
     color: white;
+    margin-top: 2rem;
 }
 
 .story-form {
