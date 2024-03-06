@@ -16,11 +16,10 @@ function ProfilesPage() {
 
   const navigate = useNavigate();
 
-  function Getuser() {
+  async function Getuser() {
     try {
-      axios.get(`/api/profile/${id}`).then((res) => {
-        setuser(res.data);
-      });
+      const res = await axios.get(`/api/profile/${id}`);
+      setuser(res.data);
       setisLoading(false);
     } catch (error) {
       setisLoading(false);
