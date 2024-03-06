@@ -14,8 +14,13 @@ function Header({ isStory, setisStory }) {
   const Userid = localStorage.getItem("UserID");
 
   async function Getuser() {
-    const res = await axios.get(`/api/profile/${Userid}`)
-    setuserInfo(res?.data);
+    try {
+      const res = await axios.get(`/api/profile/${Userid}`)
+      setuserInfo(res?.data);
+    } catch (error) {
+      console.log(error);
+    }
+
   }
 
   useEffect(() => {
@@ -67,7 +72,7 @@ function Header({ isStory, setisStory }) {
           </div>
 
           <div className="nav-btns">
-            {id ? (
+            {Userid ? (
               <>
                 <div className="nav_create">
                   <Link to={"/story/" + id} href="">
@@ -168,6 +173,7 @@ function Header({ isStory, setisStory }) {
                 </Link>
               </div>
             )}
+
             {!IsMenuOpen ? <svg onClick={handleClick} xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6 menu">
               <path strokeLinecap="round" strokeLinejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
             </svg> :
