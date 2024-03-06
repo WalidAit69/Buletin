@@ -8,6 +8,7 @@ import Image from "../components/Image";
 function PostPage() {
   const { id } = useParams();
   const [postInfo, setpostInfo] = useState("");
+  const [isLoading, setisLoading] = useState(true);
 
   const currentUser = localStorage.getItem("UserID");
   const navigate = useNavigate();
@@ -15,6 +16,7 @@ function PostPage() {
   async function fetchData() {
     const res = await axios(`/api/post/${id}`);
     setpostInfo(res.data);
+    setisLoading(false);
   }
 
   async function deletePost() {
@@ -28,13 +30,11 @@ function PostPage() {
     fetchData();
   }, []);
 
-  console.log(postInfo);
-
-  if (!postInfo) return "";
+  if (!id || id == undefined) return <span className="">Error</span>;
 
   return (
     <section className="container">
-      <div className="post_info">
+      {!isLoading ? <div className="post_info">
         <p className="post_info_topic">{postInfo.topic}</p>
         <h1>{postInfo.title}</h1>
 
@@ -147,7 +147,7 @@ function PostPage() {
         )}
         <Image src={postInfo.cover} alt="" />
         <p className="post_info_content" dangerouslySetInnerHTML={{ __html: postInfo.content }}></p>
-      </div>
+      </div> : <div className="loading"><span className="bigloader"></span></div>}
     </section>
   );
 }

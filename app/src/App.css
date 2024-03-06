@@ -276,6 +276,13 @@ header nav {
   }
 }
 
+.loading{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 80vh;
+}
+
 @media (width <=1550px) {
   .container {
     max-width: 1200px;
