@@ -13,19 +13,29 @@ function ProfilePage() {
   const [user, setuser] = useState("");
   const [profilepic, setprofilepic] = useState("");
   const [profilecover, setprofilecover] = useState("");
+  const [isLoading, setisLoading] = useState(true);
+
 
   const navigate = useNavigate();
 
   const { id } = useParams();
 
   async function profile() {
-    const res = await axios.get(`/api/profile/${id}`, {
-      withCredentials: true,
-    });
+    try {
+      const res = await axios.get(`/api/profile/${id}`, {
+        withCredentials: true,
+      });
 
-    setuser(res.data);
-    setprofilepic(res.data.profile);
-    setprofilecover(res.data.cover);
+      setuser(res.data);
+      setprofilepic(res.data.profile);
+      setprofilecover(res.data.cover);
+      setisLoading(false);
+    } catch (error) {
+      setisLoading(false);
+      alert('User not found');
+      navigate('/')
+    }
+
   }
 
   function logout() {
@@ -44,65 +54,67 @@ function ProfilePage() {
 
   return (
     <main className="container">
-      <h1 className="profile_title">{title}</h1>
+      {!isLoading ? <>
+        <h1 className="profile_title">{title}</h1>
 
-      <div className="profile_page">
+        <div className="profile_page">
 
-        <div className="profile_links">
-          <List
-            title={title}
-            settitle={settitle}
-            selectedItem={selectedItem}
-            setselectedItem={setselectedItem}
-          ></List>
-        </div>
-
-        {title === "Details" && (
-          <Profile_details
-            user={user}
-            profilepic={profilepic}
-            profilecover={profilecover}
-            setprofilecover={setprofilecover}
-            setprofilepic={setprofilepic}
-          ></Profile_details>
-        )}
-
-        {title === "Profile" && (
-          <Profile_preview
-            user={user}
-            profilepic={profilepic}
-            profilecover={profilecover}
-          ></Profile_preview>
-        )}
-
-        {title === "Security" && (
-          <Security_details user={user}></Security_details>
-        )}
-
-        {title === "Log out" && (
-          <div className="logOut">
-            <h3>Are you sure you want to log out</h3>
-            <div>
-              <button className="profile-btn" onClick={logout}>
-                Yes
-              </button>
-
-              <button
-                className="profile-btn"
-                onClick={(e) => {
-                  e.preventDefault();
-                  settitle("Profile");
-                  setselectedItem(1);
-                }}
-              >
-                No
-              </button>
-            </div>
+          <div className="profile_links">
+            <List
+              title={title}
+              settitle={settitle}
+              selectedItem={selectedItem}
+              setselectedItem={setselectedItem}
+            ></List>
           </div>
-        )}
 
-      </div>
-    </main>
+          {title === "Details" && (
+            <Profile_details
+              user={user}
+              profilepic={profilepic}
+              profilecover={profilecover}
+              setprofilecover={setprofilecover}
+              setprofilepic={setprofilepic}
+            ></Profile_details>
+          )}
+
+          {title === "Profile" && (
+            <Profile_preview
+              user={user}
+              profilepic={profilepic}
+              profilecover={profilecover}
+            ></Profile_preview>
+          )}
+
+          {title === "Security" && (
+            <Security_details user={user}></Security_details>
+          )}
+
+          {title === "Log out" && (
+            <div className="logOut">
+              <h3>Are you sure you want to log out</h3>
+              <div>
+                <button className="profile-btn" onClick={logout}>
+                  Yes
+                </button>
+
+                <button
+                  className="profile-btn"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    settitle("Profile");
+                    setselectedItem(1);
+                  }}
+                >
+                  No
+                </button>
+              </div>
+            </div>
+          )}
+
+        </div>
+      </> : <div className="loading"><span className="bigloader"></span></div>}
+    </main >
   );
 }
 

@@ -1,6 +1,6 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import img from "../../assets/user.png";
 import Profile_post_card from "../widgets/Profile_post_card";
 import Image from "../components/Image";
@@ -10,13 +10,23 @@ function ProfilesPage() {
   const [user, setuser] = useState("");
   const [posts, setposts] = useState("");
   const [follow, setfollow] = useState();
+  const [isLoading, setisLoading] = useState(true);
 
   const currentId = localStorage.getItem("UserID");
 
+  const navigate = useNavigate();
+
   function Getuser() {
-    axios.get(`/api/profile/${id}`).then((res) => {
-      setuser(res.data);
-    });
+    try {
+      axios.get(`/api/profile/${id}`).then((res) => {
+        setuser(res.data);
+      });
+      setisLoading(false);
+    } catch (error) {
+      setisLoading(false);
+      alert('User Not Found');
+      navigate('/')
+    }
   }
 
   function getPosts() {
@@ -25,7 +35,7 @@ function ProfilesPage() {
     });
   }
 
-  function Follow(e){
+  function Follow(e) {
     e.preventDefault();
 
     if (!currentId) {
@@ -37,15 +47,15 @@ function ProfilesPage() {
     const config = {
       method: "POST",
       url: `/api/users/${id}/${currentId}`,
-      withCredentials : true,
+      withCredentials: true,
     }
 
-    axios(config).then((res) =>{
+    axios(config).then((res) => {
       setfollow(true);
     })
   }
 
-  function UnFollow(e){
+  function UnFollow(e) {
     e.preventDefault();
 
     if (!currentId) {
@@ -56,10 +66,10 @@ function ProfilesPage() {
     const config = {
       method: "DELETE",
       url: `/api/users/${id}/${currentId}`,
-      withCredentials : true,
+      withCredentials: true,
     }
 
-    axios(config).then((res) =>{
+    axios(config).then((res) => {
       setfollow(false);
     })
   }
@@ -73,7 +83,7 @@ function ProfilesPage() {
 
   return (
     <div className="profile_preview_info">
-      <div className="profile_preview_banner">
+      {!isLoading ? <div className="profile_preview_banner">
         {user.cover ? (
           <Image
             src={user.cover}
@@ -156,7 +166,7 @@ function ProfilesPage() {
               ))}
           </div>
         </div>
-      </div>
+      </div> : <div className="loading"><span className="bigloader"></span></div>}
     </div>
   );
 }
