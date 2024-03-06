@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useState } from "react";
 import "./PostPage.css";
-import { Link, useNavigate, useParams } from "react-router-dom";
+import { Link, redirect, useNavigate, useParams } from "react-router-dom";
 import { format } from "date-fns";
 import axios from "axios";
 import Image from "../components/Image";
@@ -14,9 +14,16 @@ function PostPage() {
   const navigate = useNavigate();
 
   async function fetchData() {
-    const res = await axios(`/api/post/${id}`);
-    setpostInfo(res.data);
-    setisLoading(false);
+    try {
+      const res = await axios(`/api/post/${id}`);
+      setpostInfo(res.data);
+      setisLoading(false);
+    } catch (error) {
+      setisLoading(false);
+      alert('Post not found');
+      navigate('/')
+    }
+
   }
 
   async function deletePost() {
@@ -29,8 +36,6 @@ function PostPage() {
   useEffect(() => {
     fetchData();
   }, []);
-
-  if (!id || id == undefined) return <span className="">Error</span>;
 
   return (
     <section className="container">
