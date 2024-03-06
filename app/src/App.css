@@ -1,6 +1,5 @@
 .header {
   padding: 15px;
-  padding-bottom: 3rem !important;
 }
 
 .container {
@@ -106,7 +105,7 @@ header nav {
   border-radius: 15px;
   text-align: center;
   padding: 2rem 0;
-  margin: .5rem 0 2rem 0;
+  margin: 4rem 0;
 }
 
 .title h4 {
@@ -276,7 +275,7 @@ header nav {
   }
 }
 
-.loading{
+.loading {
   display: flex;
   align-items: center;
   justify-content: center;
