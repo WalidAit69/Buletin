@@ -81,7 +81,7 @@ function CreatePost() {
     profile();
   }, []);
 
-
+console.log(files);
 
   return (
     <section className="create-post">
